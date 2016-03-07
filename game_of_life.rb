@@ -6,7 +6,11 @@ class World
 
     @cell_grid = Array.new(3) do |row|
                 Array.new(3) do |columns|
+                  Cell.new
               end
             end
   end
+end
+
+class Cell
 end
