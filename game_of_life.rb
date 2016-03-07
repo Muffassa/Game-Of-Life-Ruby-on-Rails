@@ -13,5 +13,11 @@ class World
 end
 
 class Cell
-  attr_accessor :alive
+  attr_accessor :alive, :x, :y
+
+  def initialize(x = 0, y = 0)
+    @x = x
+    @y = y
+    @alive = false
+  end
 end
