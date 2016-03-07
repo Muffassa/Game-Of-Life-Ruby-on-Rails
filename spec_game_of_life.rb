@@ -22,6 +22,9 @@ describe "Game of life" do
 
       subject.cell_grid.each do |row|
         row.is_a?(Array).should be_truthy
+        row.each do |column|
+          column.is_a?(Cell).should be_truthy
+        end
       end
     end
   end
@@ -31,6 +34,14 @@ describe "Game of life" do
 
     it "should create new cell object" do
       subject.is_a?(Cell).should be_truthy
+    end
+
+    it "should respond to proper methods" do
+      subject.should respond_to(:alive)
+    end
+
+    it "should initialize be properly" do
+      subject.alive.should be_falsey
     end
   end
 

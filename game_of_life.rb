@@ -13,4 +13,5 @@ class World
 end
 
 class Cell
+  attr_accessor :alive
 end
