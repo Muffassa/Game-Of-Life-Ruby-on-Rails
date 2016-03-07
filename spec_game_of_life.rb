@@ -18,6 +18,7 @@ describe "Game of life" do
       subject.should respond_to(:rows)
       subject.should respond_to(:columns)
       subject.should respond_to(:cell_grid)
+      subject.should respond_to(:neighbours_around_cell)
     end
 
     it "should create proper cell grid on initialization" do
@@ -85,7 +86,10 @@ describe "Game of life" do
     neighbours dies, as if caused by under-population." do
 
         it "should kill cell with 1 live neightbour" do
-
+          game = Game.new(world, [[1,0], [2,0]])
+          game.tick!
+          world.cell_grid[1][0].should be_dead
+          world.cell_grid[2][0].should be_dead
         end
     end
 
