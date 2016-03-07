@@ -49,4 +49,17 @@ describe "Game of life" do
     end
   end
 
+  context "Rules" do
+
+    let!(:game) {Game.new}
+    context "Rule: Any live cell with fewer than two live
+    neighbours dies, as if caused by under-population." do
+
+        it "should kill cell with 1 live neightbour" do
+
+        end
+    end
+
+  end
+
 end

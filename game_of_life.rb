@@ -1,3 +1,6 @@
+class Game
+end
+
 class World
   attr_accessor :rows, :columns, :cell_grid
   def initialize(rows = 3, columns = 3)
@@ -6,7 +9,7 @@ class World
 
     @cell_grid = Array.new(3) do |row|
                 Array.new(3) do |columns|
-                  Cell.new
+                  Cell.new(columns, row)
               end
             end
   end
