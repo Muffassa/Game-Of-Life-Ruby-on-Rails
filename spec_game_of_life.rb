@@ -4,6 +4,9 @@ require 'rspec'
 require_relative "game_of_life.rb"
 
 describe "Game of life" do
+
+!let(:world) {World.new}
+
   context "World" do
     subject { World.new }
 
@@ -40,6 +43,7 @@ describe "Game of life" do
       subject.should respond_to(:alive)
       subject.should respond_to(:x)
       subject.should respond_to(:y)
+      subject.should respond_to(:alive?)
     end
 
     it "should initialize be properly" do
@@ -66,6 +70,12 @@ describe "Game of life" do
       subject.seeds.each do |cell|
         cell.is_a?(Cell).should be_truthy
       end
+    end
+
+    it "should plant seeds properly" do
+      game = Game.new(world, [[1, 2],[0,2]])
+      world.cell_grid[1][2].should be_alive
+      world.cell_grid[0][2].should be_alive
     end
   end
   context "Rules" do
