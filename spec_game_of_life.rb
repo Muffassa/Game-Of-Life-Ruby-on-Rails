@@ -1,7 +1,7 @@
 #test file
 
-require 'rspec'
 require_relative "game_of_life.rb"
+require 'rspec'
 
 describe "Game of life" do
 
@@ -18,7 +18,7 @@ describe "Game of life" do
       subject.should respond_to(:rows)
       subject.should respond_to(:columns)
       subject.should respond_to(:cell_grid)
-      subject.should respond_to(:neighbours_around_cell)
+      subject.should respond_to(:live_neighbours_around_cell)
     end
 
     it "should create proper cell grid on initialization" do
@@ -30,6 +30,20 @@ describe "Game of life" do
           column.is_a?(Cell).should be_truthy
         end
       end
+    end
+
+    it "should detect neightbour to the North" do
+      subject.cell_grid[0][1].should be_dead
+      subject.cell_grid[0][1].alive = true
+      subject.cell_grid[0][1].should be_alive
+      subject.live_neighbours_around_cell(subject.cell_grid[1][1]).count.should == 1
+    end
+
+    it "should detect neightbour to the East" do
+      subject.cell_grid[1][2].should be_dead
+      subject.cell_grid[1][2].alive = true
+      subject.cell_grid[1][2].should be_alive
+      subject.live_neighbours_around_cell(subject.cell_grid[1][1]).count.should == 1
     end
   end
 

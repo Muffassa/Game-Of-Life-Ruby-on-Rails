@@ -16,6 +16,10 @@ class World
     @rows = rows
     @columns = columns
 
+    #[[Cell.new, Cell.new, Cell.new],
+    #[Cell.new, Cell.new, Cell.new],
+    #[Cell.new, Cell.new, Cell.new]],
+
     @cell_grid = Array.new(3) do |row|
                 Array.new(3) do |columns|
                   Cell.new(columns, row)
@@ -23,7 +27,20 @@ class World
             end
   end
 
-  def neighbours_around_cell(cell)
+  def live_neighbours_around_cell(cell)
+    live_neighbours = []
+
+    #neighbours to the North
+    if cell.y > 0
+      candidate = self.cell_grid[cell.y - 1][cell.x]
+      live_neighbours << candidate if candidate.alive?
+    end
+
+    if cell.x < 2
+      candidate = self.cell_grid[cell.y][cell.x + 1]
+      live_neighbours << candidate if candidate.alive?
+    end
+    live_neighbours
   end
 end
 
@@ -36,7 +53,6 @@ class Cell
     @alive = false
   end
 
-  def alive?
-    alive
-  end
+  def alive?; alive; end
+  def dead?; !alive; end
 end
