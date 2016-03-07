@@ -49,6 +49,25 @@ describe "Game of life" do
     end
   end
 
+  context "Game" do
+    subject {Game.new}
+    it "should create new game object" do
+      subject.is_a?(Game).should be_truthy
+    end
+
+    it "should respond to proper methods" do
+      subject.should respond_to(:world)
+      subject.should respond_to(:seeds)
+    end
+
+    it "should initialize properly" do
+      subject.world.is_a?(World).should be_truthy
+      subject.seeds.is_a?(Array).should be_truthy
+      subject.seeds.each do |cell|
+        cell.is_a?(Cell).should be_truthy
+      end
+    end
+  end
   context "Rules" do
 
     let!(:game) {Game.new}
