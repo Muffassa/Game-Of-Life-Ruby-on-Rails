@@ -91,11 +91,12 @@ describe "Game of life" do
       subject.should respond_to(:y)
       subject.should respond_to(:alive?)
       subject.should respond_to(:die!)
+      subject.should respond_to(:revive!)
     end
 
     it "should initialize be properly" do
       subject.alive.should be_falsey
-      subject.x.should == 0
+      subject.x.should === 0
       subject.y.should == 0
     end
   end
@@ -128,17 +129,76 @@ describe "Game of life" do
   context "Rules" do
 
     let!(:game) {Game.new}
-    context "Rule: Any live cell with fewer than two live
+    context "Rule 1: Any live cell with fewer than two live
     neighbours dies, as if caused by under-population." do
 
         it "should kill cell with 1 live neightbour" do
-          game = Game.new(world, [[1,0], [2,0]])
+          game = Game.new(world, [[1,0], [0,1]])
           game.tick!
           world.cell_grid[1][0].should be_dead
-          world.cell_grid[2][0].should be_dead
+          world.cell_grid[0][1].should be_dead
+        end
+
+        it "should kill cell with 0 live neighbours" do
+          game.world.cell_grid[1][1].alive = true
+          game.tick!
+          game.world.cell_grid[1][1].should be_dead
+        end
+
+        it "should cell alive with two neightbours" do
+          game = Game.new(world, [[0,1],[1,1],[2,1]])
+          game.tick!
+          world.cell_grid[1][1].should be_alive
+        end
+    end
+    context "Rule 2: Any live cell with two or
+    three live neighbours lives on to the next generation." do
+
+        it "should live cell with two neightbours" do
+          game = Game.new(world, [[1,1],[1,0],[1,2]])
+          world.live_neighbours_around_cell(world.cell_grid[1][1]).count.should == 2
+          world.live_neighbours_around_cell(world.cell_grid[1][0]).count.should == 1
+          game.tick!
+          world.cell_grid[1][1].should be_alive
+          world.cell_grid[1][0].should be_dead
+          world.cell_grid[1][2].should be_dead
+        end
+
+        it "should be live cell with three neightbours" do
+          game = Game.new(world, [[0,1],[1,1],[2,1],[2,2]])
+          game.tick!
+          world.cell_grid[0][1].should be_dead
+          world.cell_grid[1][1].should be_alive
+          world.cell_grid[2][1].should be_alive
+          world.cell_grid[2][2].should be_alive
+        end
+    end
+    context "Rule 3: Any live cell with more than three
+    live neighbours dies, as if by over-population " do
+
+        it "should be dead with more than three neightbours" do
+          game = Game.new(world, [[0,0],[0,1],[0,2],[1,0],[1,1]])
+          game.tick!
+          world.cell_grid[0][0].should be_alive
+          world.cell_grid[0][1].should be_dead
+          world.cell_grid[0][2].should be_alive
+          world.cell_grid[1][0].should be_alive
+          world.cell_grid[1][1].should be_dead
         end
     end
 
+    context "Rule 4: Any dead cell with exactly three live neighbours
+    becomes a live cell, as if by reproduction" do
+        it "should revive dead cell with 3 neightbours" do
+          game = Game.new(world, [[0,1],[1,0],[1,2]])
+          world.live_neighbours_around_cell(world.cell_grid[0][1]).count == 1
+          game.tick!
+          world.cell_grid[1][1].should be_alive
+          world.cell_grid[0][1].should be_alive
+          world.cell_grid[1][0].should be_dead
+          world.cell_grid[1][2].should be_dead
+        end
+    end
   end
 
 end
