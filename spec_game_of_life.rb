@@ -32,17 +32,35 @@ describe "Game of life" do
       end
     end
 
-    it "should detect neightbour to the North" do
+    it "should detect neightbour on the North" do
       subject.cell_grid[0][1].should be_dead
       subject.cell_grid[0][1].alive = true
       subject.cell_grid[0][1].should be_alive
       subject.live_neighbours_around_cell(subject.cell_grid[1][1]).count.should == 1
     end
 
-    it "should detect neightbour to the East" do
+    it "should detect neightbour on the East" do
       subject.cell_grid[1][2].should be_dead
       subject.cell_grid[1][2].alive = true
       subject.cell_grid[1][2].should be_alive
+      subject.live_neighbours_around_cell(subject.cell_grid[1][1]).count.should == 1
+    end
+
+    it "should detect neightbour on the South" do
+      subject.cell_grid[2][1].should be_dead
+      subject.cell_grid[2][1].alive = true
+      subject.live_neighbours_around_cell(subject.cell_grid[1][1]).count.should == 1
+    end
+
+    it "should detect neightbour on the East" do
+      subject.cell_grid[1][0].should be_dead
+      subject.cell_grid[1][0].alive = true
+      subject.live_neighbours_around_cell(subject.cell_grid[1][1]).count.should == 1
+    end
+
+    it "should detect neightbour on the East-North" do
+      subject.cell_grid[0][0].should be_dead
+      subject.cell_grid[0][0].alive = true
       subject.live_neighbours_around_cell(subject.cell_grid[1][1]).count.should == 1
     end
   end

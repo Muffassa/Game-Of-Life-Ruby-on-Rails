@@ -40,6 +40,21 @@ class World
       candidate = self.cell_grid[cell.y][cell.x + 1]
       live_neighbours << candidate if candidate.alive?
     end
+
+    if cell.y < 2
+      candidate = self.cell_grid[cell.y + 1][cell.x]
+      live_neighbours << candidate if candidate.alive?
+    end
+
+    if cell.x > 0
+      candidate = self.cell_grid[cell.y][cell.x - 1]
+      live_neighbours << candidate if candidate.alive?
+    end
+
+    if cell.x > 0 and cell.y > 0
+      candidate = self.cell_grid[cell.y - 1][cell.x - 1]
+      live_neighbours << candidate if candidate.alive?
+    end
     live_neighbours
   end
 end
