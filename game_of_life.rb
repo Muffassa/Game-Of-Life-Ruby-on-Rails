@@ -8,21 +8,32 @@ class Game
       world.cell_grid[seed[0]][seed[1]].alive = true
     end
   end
+
+  def tick!
+    world.cells.each do |cell|
+      #Rule 1
+      if cell.alive? and world.live_neighbours_around_cell(cell).count < 2
+        cell.die!
+      end
+    end
+  end
 end
 
 class World
-  attr_accessor :rows, :columns, :cell_grid
+  attr_accessor :rows, :columns, :cell_grid, :cells
   def initialize(rows = 3, columns = 3)
     @rows = rows
     @columns = columns
-
+    @cells = []
     #[[Cell.new, Cell.new, Cell.new],
     #[Cell.new, Cell.new, Cell.new],
     #[Cell.new, Cell.new, Cell.new]],
 
     @cell_grid = Array.new(3) do |row|
-                Array.new(3) do |columns|
-                  Cell.new(columns, row)
+                Array.new(3) do |cols|
+                  cell = Cell.new(cols, row)
+                  cells << cell
+                  cell
               end
             end
   end
@@ -35,24 +46,39 @@ class World
       candidate = self.cell_grid[cell.y - 1][cell.x]
       live_neighbours << candidate if candidate.alive?
     end
-
-    if cell.x < 2
+    #neighbours on the East
+    if cell.x < (columns - 1)
       candidate = self.cell_grid[cell.y][cell.x + 1]
       live_neighbours << candidate if candidate.alive?
     end
-
-    if cell.y < 2
+    #neighbours on the South
+    if cell.y < (rows - 1)
       candidate = self.cell_grid[cell.y + 1][cell.x]
       live_neighbours << candidate if candidate.alive?
     end
-
+    #neighbours on the West
     if cell.x > 0
       candidate = self.cell_grid[cell.y][cell.x - 1]
       live_neighbours << candidate if candidate.alive?
     end
-
+    #neighbours on the North-West
     if cell.x > 0 and cell.y > 0
       candidate = self.cell_grid[cell.y - 1][cell.x - 1]
+      live_neighbours << candidate if candidate.alive?
+    end
+    #neighbours on the North-East
+    if cell.x < (columns - 1) and cell.y > 0
+      candidate = self.cell_grid[cell.y - 1][cell.x + 1]
+      live_neighbours << candidate if candidate.alive?
+    end
+    #neighbours on the South - East
+    if cell.x < (columns - 1) and cell.y < (rows - 1)
+      candidate = self.cell_grid[cell.y + 1][cell.x + 1]
+      live_neighbours << candidate if candidate.alive?
+    end
+
+    if cell.x > 0 and cell.y < (rows - 1)
+      candidate = self.cell_grid[cell.y + 1][cell.x - 1]
       live_neighbours << candidate if candidate.alive?
     end
     live_neighbours
@@ -60,7 +86,7 @@ class World
 end
 
 class Cell
-  attr_accessor :alive, :x, :y
+  attr_accessor :alive, :x, :y, :die
 
   def initialize(x = 0, y = 0)
     @x = x
@@ -70,4 +96,8 @@ class Cell
 
   def alive?; alive; end
   def dead?; !alive; end
+
+  def die!
+    @alive = false
+  end
 end

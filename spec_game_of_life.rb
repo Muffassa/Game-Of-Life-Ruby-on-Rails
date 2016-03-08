@@ -6,7 +6,7 @@ require 'rspec'
 describe "Game of life" do
 
 !let(:world) {World.new}
-
+!let(:cell) {Cell.new(1,1)}
   context "World" do
     subject { World.new }
 
@@ -19,6 +19,7 @@ describe "Game of life" do
       subject.should respond_to(:columns)
       subject.should respond_to(:cell_grid)
       subject.should respond_to(:live_neighbours_around_cell)
+      subject.should respond_to(:cells)
     end
 
     it "should create proper cell grid on initialization" do
@@ -32,36 +33,48 @@ describe "Game of life" do
       end
     end
 
+    it "should add all cells to cells array" do
+      subject.cells.count.should == 9
+    end
+
     it "should detect neightbour on the North" do
-      subject.cell_grid[0][1].should be_dead
-      subject.cell_grid[0][1].alive = true
-      subject.cell_grid[0][1].should be_alive
-      subject.live_neighbours_around_cell(subject.cell_grid[1][1]).count.should == 1
+      subject.cell_grid[cell.y - 1][cell.x].alive = true
+      subject.live_neighbours_around_cell(cell).count.should == 1
     end
 
     it "should detect neightbour on the East" do
-      subject.cell_grid[1][2].should be_dead
-      subject.cell_grid[1][2].alive = true
-      subject.cell_grid[1][2].should be_alive
-      subject.live_neighbours_around_cell(subject.cell_grid[1][1]).count.should == 1
+      subject.cell_grid[cell.y][cell.x + 1].alive = true
+      subject.live_neighbours_around_cell(cell).count.should == 1
     end
 
     it "should detect neightbour on the South" do
-      subject.cell_grid[2][1].should be_dead
-      subject.cell_grid[2][1].alive = true
-      subject.live_neighbours_around_cell(subject.cell_grid[1][1]).count.should == 1
+      subject.cell_grid[cell.y + 1][cell.x].alive = true
+      subject.live_neighbours_around_cell(cell).count.should == 1
     end
 
-    it "should detect neightbour on the East" do
-      subject.cell_grid[1][0].should be_dead
-      subject.cell_grid[1][0].alive = true
-      subject.live_neighbours_around_cell(subject.cell_grid[1][1]).count.should == 1
+    it "should detect neightbour on the West" do
+      subject.cell_grid[cell.y][cell.x - 1].alive = true
+      subject.live_neighbours_around_cell(cell).count.should == 1
     end
 
-    it "should detect neightbour on the East-North" do
-      subject.cell_grid[0][0].should be_dead
-      subject.cell_grid[0][0].alive = true
-      subject.live_neighbours_around_cell(subject.cell_grid[1][1]).count.should == 1
+    it "should detect neightbour on the West-North" do
+      subject.cell_grid[cell.y - 1][cell.x - 1].alive = true
+      subject.live_neighbours_around_cell(cell).count.should == 1
+    end
+
+    it "should detect neightbour on the North-East" do
+      subject.cell_grid[cell.y - 1][cell.x + 1].alive = true
+      subject.live_neighbours_around_cell(cell).count.should == 1
+    end
+
+    it "should detect neightbour on the South - East" do
+      subject.cell_grid[cell.y + 1][cell.x + 1].alive = true
+      subject.live_neighbours_around_cell(cell).count.should == 1
+    end
+
+    it "should detect neightbour on the South - West" do
+      subject.cell_grid[cell.y + 1][cell.x - 1].alive = true
+      subject.live_neighbours_around_cell(cell).count.should == 1
     end
   end
 
@@ -77,6 +90,7 @@ describe "Game of life" do
       subject.should respond_to(:x)
       subject.should respond_to(:y)
       subject.should respond_to(:alive?)
+      subject.should respond_to(:die!)
     end
 
     it "should initialize be properly" do
