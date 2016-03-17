@@ -47,7 +47,7 @@ class Game
 end
 
 class World
-  attr_accessor :rows, :columns, :cell_grid, :cells
+  attr_accessor :rows, :columns, :cell_grid, :cells, :randomly_populate
   def initialize(rows = 3, columns = 3)
     @rows = rows
     @columns = columns
@@ -56,8 +56,8 @@ class World
     #[Cell.new, Cell.new, Cell.new],
     #[Cell.new, Cell.new, Cell.new]],
 
-    @cell_grid = Array.new(3) do |row|
-                Array.new(3) do |cols|
+    @cell_grid = Array.new(rows) do |row|
+                Array.new(columns) do |cols|
                   cell = Cell.new(cols, row)
                   cells << cell
                   cell
@@ -109,6 +109,16 @@ class World
       live_neighbours << candidate if candidate.alive?
     end
     live_neighbours
+  end
+
+  def live_cells
+    cells.select {|cell| cell.alive}
+  end
+
+  def randomly_populate
+    cells.each do |cell|
+      cell.alive = [true, false].sample
+    end
   end
 end
 
